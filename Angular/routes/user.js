@@ -17,6 +17,11 @@ const router = express.Router();
  require('dotenv').config();
  // Handle POST request to create a new user
 //  router.post('/signup', (req, res) => {...}): This defines a route handler for POST requests to the '/signup' endpoint. When a POST request is made to this endpoint, this handler function will be executed.
+
+var auth = require('../services/authentication');
+
+var checkrole = require('../services/checkrole');
+
 router.post('/signup',(req, res)=> {
     // let user = req.body;: This extracts the request body from the incoming POST request. It assumes that the request body contains JSON data representing the user information.
 let user = req.body;
@@ -159,7 +164,7 @@ module.exports=router;
 
 
 
-router.get('/get',(req, res)=>{
+router.get('/get',auth.authenticateToken,(req, res)=>{
     var query = "select id ,name , email ,password from user where role == 'user'"
     connection.query(query,(req,res) =>{
             if (!err)
@@ -174,7 +179,7 @@ router.get('/get',(req, res)=>{
 })
 
 
-router.patch('/update',(req, res)=>{
+router.patch('/update',auth.authenticateToken,(req, res)=>{
     let user = req.body
     var query = "update user set status=? where id = ?"
  
@@ -200,7 +205,7 @@ router.patch('/update',(req, res)=>{
 })
 
 
-router.get('/update',(req, res)=>{
+router.get('/update',auth.authenticateToken,(req, res)=>{
 
     return res.status(200).json({message: "true"});  
  
@@ -208,7 +213,7 @@ router.get('/update',(req, res)=>{
 })
 
 
-router.get('/changePassword',(req, res)=>{
+router.get('/changePassword',auth.authenticateToken,(req, res)=>{
 
     return res.status(200).json({message: "true"});  
  
