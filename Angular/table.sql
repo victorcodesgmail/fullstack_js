@@ -13,3 +13,6 @@ CREATE TABLE users (
 
 INSERT INTO users (name, contactNumber, email, password, status, role) 
 VALUES ('Admin', '1234567890', 'john@example.com', 'admin', 'true', 'admin');
+
+
+-- mysql -u victor -p

@@ -41,6 +41,7 @@ if(!err){
                 return res.status(500).json(err);
             }
         })
+        
     }
     else{
         return res.status(400).json({message: "Email alread exist"})
@@ -108,7 +109,7 @@ var transporter = nodemailer.createTransport({
 
 
 
-router.post('forgotPassword',(req, res)=>{
+router.post('/forgotPassword',(req, res)=>{
 
     const user  = req.body;
 
@@ -122,10 +123,10 @@ router.post('forgotPassword',(req, res)=>{
 
             if (results.length <= 0 )
             {
-
+   console.log("hello");
                 return res.status(200).json({message: "password sent to email"});
                     
-                 
+             
                 
             }
             else{
@@ -141,7 +142,7 @@ router.post('forgotPassword',(req, res)=>{
                     }
                     else{
          
-                        console.log('Email sent'+info.response);
+                        console.log('Email sent '+info.response);
                     }
                 });
             }
@@ -154,3 +155,63 @@ router.post('forgotPassword',(req, res)=>{
 module.exports=router;
 
 //2658
+
+
+
+
+router.get('/get',(req, res)=>{
+    var query = "select id ,name , email ,password from user where role == 'user'"
+    connection.query(query,(req,res) =>{
+            if (!err)
+            {
+                return res.status(200).json(results); 
+            }
+            else
+            {
+                return res.status(500).json(err); 
+            }
+    })
+})
+
+
+router.patch('/update',(req, res)=>{
+    let user = req.body
+    var query = "update user set status=? where id = ?"
+ 
+    connection.query(query, [user.status, user.id],(res,results) =>{
+            if (!err)
+            {
+                if (results.affectedRows == 0)
+                {
+                    return res.status(404).json({message: "user id do no available"}); 
+
+                }
+                else
+                {
+                    return res.status(200).json({message: "User updated successfull"}); 
+                }
+                
+            }
+            else
+            {
+                return res.status(500).json(err); 
+            }
+    })
+})
+
+
+router.get('/update',(req, res)=>{
+
+    return res.status(200).json({message: "true"});  
+ 
+
+})
+
+
+router.get('/changePassword',(req, res)=>{
+
+    return res.status(200).json({message: "true"});  
+ 
+
+})
+ 
