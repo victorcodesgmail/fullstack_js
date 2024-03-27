@@ -15,12 +15,15 @@ const { response } = require('express');
 const jwt = require('jsonwebtoken');
 
 
+// The provided code is a middleware function for authenticating JSON Web Tokens (JWTs) in an Express.js application.
+//  Here's a breakdown of how it works:
+
 
 
 function authenticateToken(req, res, next)
 {
     // Extract JWT token from Authorization header
-    const authHeaders =  req.headers('authorization');
+    const authHeader =  req.header('authorization');
 
     // authHeader.split(' ')[1]: If authHeader is truthy (meaning it exists and is not null or undefined), 
     // this part of the expression proceeds to split the Authorization header string by spaces and extracts 
@@ -29,7 +32,7 @@ function authenticateToken(req, res, next)
 
     const token = authHeader && authHeader.split(' ')[1];
 
-    if (token == NULL)
+    if (token == null)
     {
         return res.status(403);
 

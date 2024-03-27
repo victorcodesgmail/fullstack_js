@@ -162,9 +162,7 @@ module.exports=router;
 //2658
 
 
-
-
-router.get('/get',auth.authenticateToken,(req, res)=>{
+router.get('/get',auth.authenticateToken,checkrole.checkrole,(req, res)=>{
     var query = "select id ,name , email ,password from user where role == 'user'"
     connection.query(query,(req,res) =>{
             if (!err)
@@ -178,8 +176,22 @@ router.get('/get',auth.authenticateToken,(req, res)=>{
     })
 })
 
+// The router.patch() method specifies that this route handler will handle PATCH requests.
+// '/update' is the endpoint path.
 
-router.patch('/update',auth.authenticateToken,(req, res)=>{
+// auth.authenticateToken and checkrole.checkrole are middleware functions.
+//  They are executed before the route handler is called.
+
+// auth.authenticateToken: This middleware function is responsible for authenticating the request using a token.
+//  It ensures that the user making the request is authenticated by verifying the token provided 
+// in the request.
+
+// checkrole.checkrole: This middleware function checks the role of the authenticated user.
+//  It ensures that the authenticated user has the necessary role permissions 
+// to access this route.
+
+
+router.patch('/update',auth.authenticateToken,checkrole.checkrole,(req, res)=>{
     let user = req.body
     var query = "update user set status=? where id = ?"
  
@@ -205,7 +217,7 @@ router.patch('/update',auth.authenticateToken,(req, res)=>{
 })
 
 
-router.get('/update',auth.authenticateToken,(req, res)=>{
+router.get('/update',auth.authenticateToken,checkrole.checkrole,(req, res)=>{
 
     return res.status(200).json({message: "true"});  
  
@@ -213,10 +225,101 @@ router.get('/update',auth.authenticateToken,(req, res)=>{
 })
 
 
-router.get('/changePassword',auth.authenticateToken,(req, res)=>{
+router.get('/checkToken',auth.authenticateToken,(req, res)=>{
 
     return res.status(200).json({message: "true"});  
  
 
 })
+
+
+router.post('/changePassword',(req, res)=>{
+
+    // req.body; is an object 
+    const user  = req.body;
+
+    const email  = res.locals.email;
+
+
+    var query = "select * from user where email =? and password = ?";
+
+
+    //Overall, this line of code executes a SQL query to check if there is a user with the provided email and old password in the database.
+    //  The results of the query will be available in the results variable, 
+    // and any errors will be available in the err variable.
+
+    connection.query(query, [email,user.oldPassword ],(err, results)=>{
+        if(!err){
+
+            //user not in database
+
+            if (results.length <= 0 )
+            {
+   
+                return res.status(400).json({message: "incorrec old password"});
+                    
+             
+                
+            }
+                // results[0].password: This accesses the password property of the first (and presumably only) 
+                // result returned by the database query. results likely contains an array of objects representing user data retrieved 
+                // from the database. Assuming the query was successful and found a matching user, results[0] refers to the first 
+                // user in the result set,
+                //  and .password accesses their password.
+
+
+                // user.oldPassword: This is the old password provided by the user in the request body. 
+                // It's typically extracted from the request object (req.body).
+            else if (results[0].password == user.oldPassword )
+            {
+
+                // The SET password = ? part sets the password column to a new value.
+                //  The ? is a placeholder for a parameter that will be supplied later.
+
+                // The WHERE email = ? part specifies the condition for which rows to update.
+                //  In this case, it updates the row where the email column matches a specific value. 
+                // Again, ? is a placeholder for a parameter.
+                query = "update user set password =? where email = ?"
+
+
+                // The first parameter is the SQL query string (query).
+
+                // The second parameter is an array of values to substitute into the placeholders (?) 
+                // in the query string. Here, user.newPassword is the new password provided by the user, and email
+                //  is the email address of the user whose password is being updated.
+
+
+                // The third parameter is a callback function that handles the result or error of the query execution. 
+                // It receives two parameters: err (an error object, if an error occurred during the query execution) 
+                // and results (the result of the query execution).
+
+                connection.query(query, [user.newPassword, email ],(err, results)=>
+                {
+                    if(!err){
+                        return res.status(200).json({message: "password updaed successfull "}); 
+                    }
+                    else{
+                        return res.status(500).json(err); 
+                    }
+                    
+                })
+
+            }
+            else{
+                return res.status(400).json({message: "something went wrong"}); 
+                 
+            }
+        }
+        else{
+            return res.status(500).json(err); 
+        }
+    })
+})
+
+
+
+
+
+
+
  
