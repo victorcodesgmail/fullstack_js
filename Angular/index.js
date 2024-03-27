@@ -7,6 +7,7 @@ var cors =require('cors');
 const  connection = require('./connection');
 // const userRoute = require('./routes/user');: Imports the userRoute module from the local file user.js. This likely contains route handlers for user-related endpoints.
 const userRoute = require('./routes/user');
+const categoryRoute = require('./routes/category');
 
 const { createConnection } = require('mysql');
 // const app = express();: Creates an instance of the Express application, which you'll use to define routes and middleware.
@@ -18,7 +19,7 @@ app.use(express.urlencoded({extended: true}));
 // app.use('/user', userRoute);: Mounts the userRoute middleware at the /user URL path. This means that any requests to /user will be handled by the userRoute router.
 app.use(express.json());
 app.use('/user', userRoute);
-
+app.use('/category', categoryRoute);
 
 module.exports = app;
 

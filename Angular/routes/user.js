@@ -157,7 +157,7 @@ router.post('/forgotPassword',(req, res)=>{
         }
     })
 })
-module.exports=router;
+
 
 //2658
 
@@ -319,7 +319,4 @@ router.post('/changePassword',(req, res)=>{
 
 
 
-
-
-
- 
+ module.exports=router;

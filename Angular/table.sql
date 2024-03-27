@@ -16,3 +16,11 @@ VALUES ('Admin', '1234567890', 'john@example.com', 'admin', 'true', 'admin');
 
 
 -- mysql -u victor -p
+
+
+CREATE TABLE  category(
+    id INT AUTO_INCREMENT  NOT NULL,
+    name VARCHAR(250) NOT NULL,
+    primary KEY(id)
+
+);
