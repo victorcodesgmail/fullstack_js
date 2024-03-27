@@ -47,6 +47,7 @@ jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
     
          res.locals = response;
          console.log(response);
+        //loop
          next();
     }
 });
