@@ -24,3 +24,11 @@ CREATE TABLE  category(
     primary KEY(id)
 
 );
+
+
+CREATE TABLE  product(
+    id INT AUTO_INCREMENT  NOT NULL,
+    name VARCHAR(250) NOT NULL,
+    primary KEY(id)
+
+);
