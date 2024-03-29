@@ -29,6 +29,11 @@ CREATE TABLE  category(
 CREATE TABLE  product(
     id INT AUTO_INCREMENT  NOT NULL,
     name VARCHAR(250) NOT NULL,
-    primary KEY(id)
+  
+    categoryID integer NOT NULL,
+
+    description integer,
+    status VARCHAR(20),
+      primary KEY(id)
 
 );

@@ -20,10 +20,10 @@ router.post('/add',auth.authenticateToken,checkrole.checkrole,(req, res)=>{
 
     query = "insert into category (name) values(?)";
 
-    connection.query(query, [category.name],(req,res) =>{
+    connection.query(query, [category.name],(err, results) =>{
         if (!err)
         {
-    let category = req.body;
+    // let category = req.body;
                 return res.status(200).json({message: "category added successfully"})
         }
 
@@ -36,7 +36,7 @@ router.post('/add',auth.authenticateToken,checkrole.checkrole,(req, res)=>{
 
 router.get('/get',auth.authenticateToken,(req, res,next)=>{
     var query = "select * from category order by name"
-    connection.query(query,(req,res) =>{
+    connection.query(query,(err, results) =>{
             if (!err)
             {
                 return res.status(200).json(results); 
@@ -56,7 +56,7 @@ router.patch('/update',auth.authenticateToken,checkrole.checkrole,(req, res,next
 
     query = "insert into category set name =? where id =?";
 
-    connection.query(query, [product.name, product.id],(req,res) =>{
+    connection.query(query, [product.name, product.id],(err,results) =>{
         if (!err)
         {
 
@@ -75,7 +75,7 @@ router.patch('/update',auth.authenticateToken,checkrole.checkrole,(req, res,next
         }
     })
   
-})
+});
 
 
 module.exports=router;
